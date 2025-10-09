@@ -1,16 +1,19 @@
 import os
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_deepseek import ChatDeepSeek
+
+load_dotenv(override=True, verbose=True)
 
 class EmotionClass:
     def __init__(self, model=os.getenv("BASE_MODEL")):
         self.chat = None
         self.Emotion = None
-        self.chatModel = ChatOpenAI(
-            model_name=model,
-            openai_api_key=os.getenv("SILLICONFLOW_API_KEY"),
-            openai_api_base=os.getenv("SILLICONFLOW_API_BASE"),
+        print(f"使用模型: {model}")
+        self.chatModel = ChatDeepSeek(
+            model = model,
+            api_key=os.getenv("DEEP_SEEK_API_KEY"),
+            api_base=os.getenv("DEEP_SEEK_API_BASE"),
         )
     def Emotion_Sensing(self, input):
         # 处理输入长度

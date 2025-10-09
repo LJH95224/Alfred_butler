@@ -2,9 +2,8 @@ import os
 import logging
 from dotenv import load_dotenv as _load_dotenv
 from dingtalk_stream import AckMessage, ChatbotMessage, DingTalkStreamClient, Credential, ChatbotHandler, CallbackMessage
-from  Storage import add_user
-
-# from src.Agents import AgentClass
+from Storage import add_user
+from Agents import AgentClass
 
 
 _load_dotenv(verbose=True, override=True)
@@ -54,15 +53,15 @@ class EchoTextHandler(ChatbotHandler):
         logger.info(f"用户{userid}已经添加到存储中")
 
         # 使用AI代理处理用户消息
-        # msg = AgentClass().run_agent(text)
-        # logger.info(msg)
-        #
-        # # 回复处理后的消息
-        # self.reply_text(msg["output"], incoming_message)
+        msg = AgentClass().run_agent(text)
+        logger.info(msg)
+
+        # 回复处理后的消息
+        self.reply_text(msg["output"], incoming_message)
 
 
         # 固定回声回复
-        self.reply_text("你说的是："+ text, incoming_message)
+        # self.reply_text("你说的是："+ text, incoming_message)
         # 返回成功状态和消息
         return AckMessage.STATUS_OK, "OK"
 

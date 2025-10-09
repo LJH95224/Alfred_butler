@@ -1,7 +1,7 @@
 from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import RedisChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_openai import ChatOpenAI
+from langchain_deepseek import ChatDeepSeek
 from Prompt import PromptClass
 from dotenv import load_dotenv
 import os
@@ -15,10 +15,10 @@ class MemoryClass:
     def __init__(self, memorykey: str = "chat_history", model: str =os.getenv("BASE_MODEL")):
         self.memorykey = memorykey
         self.memory = []
-        self.chatmodel = ChatOpenAI(
-            model_name=model,
-            openai_api_key=os.getenv("SILLICONFLOW_API_KEY"),
-            openai_api_base=os.getenv("SILLICONFLOW_API_BASE"),
+        self.chatmodel = ChatDeepSeek(
+            model = model,
+            api_key=os.getenv("DEEP_SEEK_API_KEY"),
+            api_base=os.getenv("DEEP_SEEK_API_BASE"),
         )
     def summary_chain(self, store_message):
         try:

@@ -13,4 +13,5 @@ dependencies = [
     "langchain-openai>=0.3.28",
     "langchain-qdrant>=0.2.0",
     "python-socks>=2.7.1",
+    "redis>=6.2.0",
 ]

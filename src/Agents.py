@@ -23,18 +23,18 @@ class AgentClass:
     整合了语言模型、记忆系统，情感分析和各种工具功能
     """
     def __init__(self):
-        modelname = os.getenv("MODEL_NAME")
+        modelname = os.getenv("BASE_MODEL")
         backModel = os.getenv("BACK_MODEL")
+        print(f"modelname= {modelname}, backModel={backModel }")
         # 设置备用模型，当主模型不可用的时候使用备用模型
         fallback_llm = ChatDeepSeek(
-            model_name=backModel,
-            openai_api_key=os.getenv("DEEP_SEEK_API_KEY"),
-            openai_api_base=os.getenv("DEEP_SEEK_API_BASE"),
+            model = modelname,
+            api_key=os.getenv("DEEP_SEEK_API_KEY"),
+            api_base=os.getenv("DEEP_SEEK_API_BASE"),
         )
-
         # 创建主聊天模型
         self.chatModel = ChatOpenAI(
-            model_name=modelname,
+            model=backModel,
             openai_api_key=os.getenv("SILLICONFLOW_API_KEY"),
             openai_api_base=os.getenv("SILLICONFLOW_API_BASE"),
         ).with_fallbacks([fallback_llm])
@@ -55,7 +55,7 @@ class AgentClass:
         self.memory = MemoryClass(memorykey=self.memorykey, model=modelname)
 
         # 初始化情感分析系统
-        self.cmotion = EmotionClass(model=modelname)
+        self.emotion = EmotionClass(model=modelname)
 
         # 创建agent
         self.agent = create_tool_calling_agent(
@@ -68,7 +68,7 @@ class AgentClass:
         self.agent_chain = AgentExecutor(
             agent=self.agent,
             tools=self.tools,
-            memory=self.memery.set_momory(),
+            memory=self.memory.set_memory(),
             verbose=True, # 启动详细输出，便于调试
         ).configurable_fields(
             # 设置可配置的记忆字段，允许在运行时修改记忆系统
@@ -85,6 +85,7 @@ class AgentClass:
         :param input: 用户输入的文本
         :return: 包含AI回复的字典
         """
+        print("\ninput-----------------》", input)
         # 进行情感分析，了解用户当前的情绪状态
         self.feeling = self.emotion.Emotion_Sensing(input)
 
@@ -95,10 +96,9 @@ class AgentClass:
         # 运行代理链，处理用户输入
         # 根据当前用户ID设置对于的记忆
         res = self.agent_chain.with_config({
-            "agent_memory": self.memery.set_memory(session_id=get_user("userid"))
+            "agent_memory": self.memory.set_memory(session_id=get_user("userid"))
         }).invoke(
             {"input": input} # 传入用户输入
         )
         return res # 返回代理处理结果
-Ï
 

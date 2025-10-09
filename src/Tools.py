@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+import json
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 from typing import Optional
@@ -26,7 +27,7 @@ class DingTalkClient:
         self.union_id = os.getenv("UNION_ID")
 
     def get_access_token(self) -> str:
-        if not all(self.app_key, self.app_secret, self.union_id):
+        if not all(self.app_key and self.app_secret and self.union_id):
             raise ValueError("钉钉配置信息不完整")
 
         try:
@@ -35,7 +36,8 @@ class DingTalkClient:
                 json={"appKey": self.app_key, "appSecret": self.app_secret}
             )
             response.raise_for_status()
-            token = response.json().get("access_token")
+            data = json.loads(response.text)
+            token = data.get("accessToken")
             if not token:
                 raise ValueError("获取钉钉访问令牌失败")
             return token
@@ -120,7 +122,7 @@ def get_info_from_local(query: str) -> str:
     userid = get_user("userid")
     print(f"userid: {userid}\n")
     llm = ChatOpenAI(
-        model_name=os.getenv("BASE_MODEL"),
+        model=os.getenv("BACK_MODEL"),
         openai_api_key=os.getenv("SILLICONFLOW_API_KEY"),
         openai_api_base=os.getenv("SILLICONFLOW_API_BASE")
     )
@@ -136,18 +138,14 @@ def get_info_from_local(query: str) -> str:
     client = QdrantClient(path=os.getenv("PERSIST_DIR","./vector_store"))
     embeddingModel = OpenAIEmbeddings(
         model=os.getenv("EMBEDDING_MODEL"),
-        api_key=os.getenv("SILLICONFLOW_API_KEY"),
-        base_url=os.getenv("SILLICONFLOW_API_BASE")
+        openai_api_key=os.getenv("SILLICONFLOW_API_KEY"),
+        openai_api_base=os.getenv("SILLICONFLOW_API_BASE")
     )
 
     vector_store = QdrantVectorStore(
         client=client,
         collection_name=os.getenv("EMBEDDING_COLLECTION"),
-        embedding=OpenAIEmbeddings(
-            model=os.getenv("EMBEDDING_MODEL", "Pro/BAAI/bge-m3"),
-            api_key=os.getenv("EMBEDDING_API_KEY"),
-            base_url=os.getenv("EMBEDDING_API_BASE")
-        )
+        embedding=embeddingModel
     )
 
     retriever = vector_store.as_retriever(
@@ -327,6 +325,8 @@ def SearchSchedule(search: ScheduleSearch) -> str:
     """
     client = DingTalkClient()
     token = client.get_access_token()
+    print('clinet', client)
+    print('token', token)
 
     try:
         response = requests.get(
@@ -348,7 +348,7 @@ def SearchSchedule(search: ScheduleSearch) -> str:
 def FindPreciseOrder(orginrder: str,events:object) -> str:
     """查找精确的指令"""
     llm = ChatOpenAI(
-        model=os.getenv("BASE_MODEL"),
+        model=os.getenv("BACK_MODEL"),
         openai_api_key=os.getenv("SILLICONFLOW_API_KEY"),
         openai_api_base=os.getenv("SILLICONFLOW_API_BASE"),
     )
