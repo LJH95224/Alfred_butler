@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="第 1 页" id="U2_eADgb1y91up96HSjD">
+    <mxGraphModel dx="774" dy="1121" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="myuKATIEFMSYrmXSg-Q0-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="170" width="180" x="90" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="myuKATIEFMSYrmXSg-Q0-5" edge="1" parent="1" source="myuKATIEFMSYrmXSg-Q0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="myuKATIEFMSYrmXSg-Q0-4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="myuKATIEFMSYrmXSg-Q0-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="集成影像控件" vertex="1">
+          <mxGeometry height="40" width="120" x="120" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="myuKATIEFMSYrmXSg-Q0-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="调用控件入口" vertex="1">
+          <mxGeometry height="40" width="120" x="120" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="myuKATIEFMSYrmXSg-Q0-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;b&gt;&lt;font style=&quot;color: rgb(0, 127, 255);&quot;&gt;控件方式介入&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="100" x="130" y="160" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
